@@ -1,0 +1,906 @@
+swagger: '2.0'
+info:
+  description: "Access & License Management"
+  version: 1.0.0
+  title: Access & License Management
+  contact:
+    email: sdubey@wiley.com
+tags:
+- name: Authentication API
+- name: Users API
+- name: Group API
+paths:
+  /v1/sessions:
+    post:
+      tags:
+      - Authentication API
+      summary: Create a password based authenticated session
+      operationId: passwordBased
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        description: to do
+        required: true
+        schema:
+          $ref: '#/definitions/Password'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/SessionResponse'
+        405:
+          description: Invalid input
+  /v1/sessions/{sessionId}:
+    get:
+      tags:
+      - Authentication API
+      summary: Extends the session time on ALM
+      operationId: extendSession
+      produces:
+      - application/json
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        type: string
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SessionResponse'
+        400:
+          description: Invalid status value
+    delete:
+      tags:
+      - Authentication API
+      summary: Destroy the session on ALM
+      operationId: deleteSession
+      produces:
+      - application/json
+      parameters:
+      - name: sessionId
+        in: path
+        required: true
+        type: string
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        200:
+          description: OK
+        400:
+          description: Invalid status value
+  /v2/users:
+    post:
+      tags:
+      - Users API
+      summary: Creates a new user with the details provided in the request 
+      operationId: createUser
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        default:
+          description: successful operation
+  /v2/users/{userid}:
+    get:
+      tags:
+      - Users API
+      summary: Search user by userId
+      operationId: searchUser
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userid
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Users API
+      summary: update user profile by userId
+      operationId: updateUser
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userid
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/User'
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /v2/users/{userid}/federated:
+    get:
+      tags:
+      - Users API
+      summary: Federated Search by userId
+      operationId: searchUserFederated
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userid
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: header
+        name: x-federated-source
+        type: string
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /v2/users/{userid}/password:
+    put:
+      tags:
+      - Users API
+      summary: resets password by userId
+      operationId: resetPasswordByUserId
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userid
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/ResetPassword'
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /v2/users/{emailId}/:
+    get:
+      tags:
+      - Users API
+      summary: Search user by email Id 
+      description: This can only be done by the logged in user.
+      operationId: searchByemail
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: emailId
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Users API
+      summary: update user profile by emailId
+      operationId: updateUserbyemail
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: emailId
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/User'
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /v2/users/{emailId}/federated/:
+    get:
+      tags:
+      - Users API
+      summary: Federated Search by email Id 
+      description: This can only be done by the logged in user.
+      operationId: searchByemailFederated
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: emailId
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: header
+        name: x-federated-source
+        type: string
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /v2/users/{emailId}/password/:
+    put:
+      tags:
+      - Users API
+      summary: resets password by userId
+      operationId: resetPasswordByemailId
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: emailId
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/ResetPassword'
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /v2/securityQuestions:
+    get:
+      tags:
+      - Users API
+      summary: Gets the list of security questions
+      operationId: getSecurityQuestions
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SecurityQuestionsResponse'
+        400:
+          description: Invalid status value
+    post:
+      tags:
+      - Users API
+      summary: validate security questions
+      operationId: validateSecurityQuestions
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: validate
+        required: true
+        type: boolean
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SecurityQuestionsResponse'
+        400:
+          description: Invalid status value
+  /v2/groups:
+     post:
+      tags:
+      - Group API
+      summary: Creates a Group
+      operationId: createGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        description: To Do
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGroup'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/CreateGroupResponse'
+  /v2/groups/{groupid}:
+    get:
+     tags: 
+     - Group API
+     summary: Creates a Group
+     operationId: searchGroup
+     consumes:
+      - application/json
+     produces:
+      - application/json
+     parameters:
+      - in: path
+        name: groupid
+        required: true
+        type: string
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+     responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/CreateGroupResponse'
+    put:
+     tags: 
+     - Group API
+     summary: updates a Group
+     operationId: updateGroup
+     consumes:
+      - application/json
+     produces:
+      - application/json
+     parameters:
+      - in: path
+        name: groupid
+        required: true
+        type: string
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        description: To Do
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGroup'
+     responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/CreateGroupResponse'
+  /v2/groups/{groupID}/users:
+    get:
+      tags:
+      - Group API
+      summary: Get users associated to a group
+      operationId: searchUserinGroup
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: groupID
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GetUsersofGroupResponse'
+  /v2/users/{userId}/groups:
+    post:
+      tags:
+      - Group API
+      summary: Adds User to a Group
+      operationId: addUsertoGroup
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userId
+        type: string
+        required: true
+      - in: header
+        name: x-api-key
+        type: string
+        required: true
+      - in: header
+        name: x-application-id
+        type: string
+        required: true
+        description: "alm-456"
+      - in: header
+        name: x-request-id
+        type: string
+        required: true
+        description: "1234"
+      - in: body
+        name: body
+        description: to do
+        required: true
+        schema:
+          $ref: '#/definitions/AddUserToGroup'
+      responses:
+        201:
+          description: Created
+    get:
+       tags:
+        - Group API
+       summary: Get User's Group
+       operationId: getUserGroup
+       consumes:
+       - application/json
+       produces:
+       - application/json
+       parameters:
+       - in: path
+         name: userId
+         type: string
+         required: true
+       - in: header
+         name: x-api-key
+         type: string
+         required: true
+       - in: header
+         name: x-application-id
+         type: string
+         required: true
+         description: "alm-456"
+       - in: header
+         name: x-request-id
+         type: string
+         required: true
+         description: "1234"
+       responses:
+          200:
+           description: OK
+           schema:
+            $ref: '#/definitions/GetUsersofGroupResponse'
+          
+  
+securityDefinitions:
+  petstore_auth:
+    type: oauth2
+    authorizationUrl: http://petstore.swagger.io/oauth/dialog
+    flow: implicit
+    scopes:
+      write:pets: modify pets in your account
+      read:pets: read your pets
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  User:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+      title:
+        type: string
+      department:
+        type: string
+      organization:
+        type: string
+      phone:
+        type: string
+      dateRegistered:
+        type: string
+      dateActivated:
+        type: string
+      tcFlag:
+        type: string
+      tcAcceptanceDate:
+        type: string
+      tcAcceptorEmail:
+        type: string
+      areaOfInterest:
+        type: string
+      country:
+        type: string
+      userAddress:
+        type: object
+        properties:
+          address:
+            type: string
+          street:
+            type: string
+          city:
+            type: string
+          state:
+            type: string
+          mailingCountry:
+            type: string
+          userSecurityQuestions:
+            type: string
+      userSecurityQuestions:
+        type: object
+        properties:
+          userSecurityQuestion:
+             type: array
+             items:
+                $ref: '#/definitions/Questions'
+  Password:
+    type: object
+    required:
+    - userEmail
+    - password
+    properties:
+      userEmail:
+        type: string
+        example: "jgupta@wiley.com"
+      password:
+        type: string
+        example: "Kolkata123"
+        items:
+          type: string
+      sessionExpiryInMinutes:
+        type: string
+        example: "30"
+  ResetPassword:
+    type: object
+    required:
+    - userEmail
+    - password
+    properties:
+      userEmail:
+        type: string
+        example: "jgupta@wiley.com"
+      password:
+        type: string
+        example: "Kolkata123"
+        items:
+          type: string
+  SessionResponse:
+    type: object
+    properties:
+      source:
+        type: string
+      sessionID:
+        type: string
+      expireAt:
+        type: string
+      user:
+        type: object
+        properties:
+          userID:
+            type: string
+      imitatee:
+        type: string
+      customer:
+        type: string
+  SecurityQuestionsResponse:
+    type: array
+    items:
+       type: string
+       example: "'What kind of super power you want?'',
+                'What is the country of your ultimate dream vacation?'"
+  Questions:
+    type: object
+    properties:
+      question:
+          type: string
+      answer:
+          type: string
+  CreateGroup:
+    type: object
+    required:
+    - description
+    - name
+    properties:
+      description:
+        type: string
+        example: "description of the group"
+      name:
+        type: string
+        example: "Name of the group"
+        items:
+          type: string
+  CreateGroupResponse:
+     type: object
+     properties:
+      groupGUID:
+        type: string
+        example: "groupGUID"
+      description:
+        type: string
+        example: "description of the group"
+      name:
+        type: string
+        example: "Name of the group"
+  UpdateGroup:
+    type: object
+    required:
+    - description
+    - groupGUID
+    properties:
+      description:
+        type: string
+        example: "description of the group"
+      groupGUID:
+        type: string
+        example: "groupGUID of the group"
+        items:
+          type: string
+  GetUsersofGroupResponse:
+     type: object
+     properties:
+      groupGUID:
+        type: string
+        example: "groupGUID"
+      applicationid:
+        type: string
+        example: "applicationId of the group"
+      name:
+        type: string
+        example: "Name of the group"
+      userId:
+        type: string
+        example: "userId of the group"
+  AddUserToGroup:
+     type: object
+     properties:
+      group:
+        type: object
+        properties:
+          description:
+              type: string
+              example: "description of the group"
+          groupGUID:
+              type: string
+              example: "groupGUID of the group"
+          name:
+               type: string
+               example: "name of group"
+  
+host: alminternal-qa.aws.wiley.com
+basePath: /alm/api
+schemes:
+ - https
